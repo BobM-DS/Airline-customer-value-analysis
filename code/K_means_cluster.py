@@ -73,15 +73,43 @@ def plotEveryFeature(class_dic):
 
 class_dic = resultOfClass(labels)
 
-for cate in class_dic.keys():
-    cate_info = class_dic[cate]
-    cate_arr = np.array(cate_info)
-    filepath = '../data/categaries/'
-    filename = 'category_' + cate
-    target = filepath + filename + '.csv'
-    with open(target, 'w') as f:
-        writer = csv.writer(f)
-        writer.writerow(['L', 'R', 'F', 'M', 'C'])
-        writer.writerows(cate_info)
-    print "Category is: ", cate, 
-    print "Mean is: ", cate_arr.mean(axis=0)
+#write each categories to file.csv; target path is ../data/categories/
+def writeCategoryTofile(class_dic):
+    for cate in class_dic.keys():
+        cate_info = class_dic[cate]
+        cate_arr = np.array(cate_info)
+        filepath = '../data/categaries/'
+        filename = 'category_' + cate
+        target = filepath + filename + '.csv'
+        with open(target, 'w') as f:
+            writer = csv.writer(f)
+            writer.writerow(['L', 'R', 'F', 'M', 'C'])
+            writer.writerows(cate_info)
+        print "Category is: ", cate, 
+        print "Mean is: ", cate_arr.mean(axis=0)
+
+#plot the classes after clustering 
+'''
+parameters:
+columns: dataset's columns
+k: numbers of cluster
+centers: center of each class
+'''
+def labelPlot(columns, k, centers):
+    labels = columns #labels
+    #k = 5 #numbers of data
+    plot_data = centers
+    color = ['b', 'g', 'r', 'c', 'y'] #set color
+    
+    angles = np.linspace(0, 2*np.pi, k, endpoint=False)
+    plot_data = np.concatenate((plot_data, plot_data[:,[0]]), axis=1) 
+    angles = np.concatenate((angles, [angles[0]])) 
+    
+    fig = plt.figure()
+    ax = fig.add_subplot(111, polar=True) #set parameter Polar
+    for i in range(len(plot_data)):
+        ax.plot(angles, plot_data[i], 'o-', color = color[i], label = 'cate'+str(i), linewidth=2)# 画线
+        ax.set_rgrids(np.arange(0.01, 3.5, 0.5), np.arange(-1, 2.5, 0.5), fontproperties="SimHei")
+        ax.set_thetagrids(angles * 180/np.pi, labels, fontproperties="SimHei")
+    plt.legend(loc=4)
+    plt.show()
