@@ -10,6 +10,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 from matplotlib import pyplot as plt
 import csv
+import sys
 
 input_file = '../data/Processed_data/model_input.csv'
 
@@ -17,7 +18,7 @@ k = 5 # set the number of clustering
 
 data = pd.read_csv(input_file)
 
-k_model = KMeans(n_clusters=k, n_jobs=1)
+k_model = KMeans(n_clusters=k, n_jobs=1) 
 k_model.fit(data)
 
 centers = k_model.cluster_centers_ #centery of clustering
@@ -61,6 +62,33 @@ def resultOfClass(labels):
         class_dic[str(label)].append(row)
     return class_dic
 
+def PlotEachCluster(data, laber):
+    data = [round(i, 2) for i in data]
+    
+    ind = np.arange(5)  # the x locations for the groups
+    width = 0.7  # the width of the bars
+    
+    fig, ax = plt.subplots()
+    rects1 = ax.bar(ind - width/2, data, width, yerr=(np.std(data)),
+                    color='SkyBlue')
+    
+    # Add some text for labels, title and custom x-axis tick labels, etc.
+    title = 'Cluster' + '_' + str(laber)
+    ax.set_title(title)
+    ax.set_xticks(ind)
+    ax.set_xticklabels(('Avg_C', 'Recent', 'Frequrent', 'Miles', 'Length'))
+    ax.legend()
+    
+    offset = {'center': 0.5, 'right': 0.57, 'left': 0.43}  # x_txt = x + w*off
+    
+    for rect in rects1:
+        height = rect.get_height()
+        ax.text(rect.get_x() + rect.get_width()*offset['center'], 1.01*height,
+                '{}'.format(height), va='bottom')
+    fig_path_name = '../data/result/' + str(laber)
+    plt.savefig(fig_path_name)
+    plt.show()
+
 #plot the each feature's situation
 def plotEveryFeature(class_dic):
     for feature in range(0, 5):# C, R, F, M, L
@@ -68,9 +96,9 @@ def plotEveryFeature(class_dic):
         for class_number in range(0, 5): #for every Class 
             arr = np.array(class_dic[str(class_number)])
             plot_arr.append(arr[:,feature].mean())
-        plt.bar([1,2,3,4,5], plot_arr)
-        plt.show()
-
+            #print plot_arr
+        PlotEachCluster(plot_arr, feature)
+        
 class_dic = resultOfClass(labels)
 
 #write each categories to file.csv; target path is ../data/categories/
@@ -111,5 +139,7 @@ def labelPlot(columns, k, centers):
         ax.plot(angles, plot_data[i], 'o-', color = color[i], label = 'cate'+str(i), linewidth=2)# 画线
         ax.set_rgrids(np.arange(0.01, 3.5, 0.5), np.arange(-1, 2.5, 0.5), fontproperties="SimHei")
         ax.set_thetagrids(angles * 180/np.pi, labels, fontproperties="SimHei")
-    plt.legend(loc=4)
+    plt.legend(loc=5)
     plt.show()
+    
+plotEveryFeature(class_dic)
