@@ -45,11 +45,12 @@ for index, row in data.iterrows():
 #return mon
 
 #write to csv 
+'''
 with open(data_output, 'w') as f:
     writer = csv.writer(f)
     writer.writerow(['L', 'R', 'F', 'M', 'C'])
     writer.writerows(result)
-
+'''
 
 
     

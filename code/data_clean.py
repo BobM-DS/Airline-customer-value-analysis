@@ -19,4 +19,4 @@ index2 = data['SUM_YR_2'] != 0 #ticket's price isn't zero in second year
 index3 = (data['SEG_KM_SUM'] != 0) & (data['avg_discount'] != 0)
 result = data[index1 | index2 | index3]
 
-result.to_excel(cleaned_data, index=False)
+#result.to_excel(cleaned_data, index=False)

@@ -22,4 +22,4 @@ explore = data.describe(percentiles=[], include='all').T
 explore['null'] = len(data) - explore['count']
 explore['null_per'] = explore['null'] / len(data)
 explore = explore[['null', 'null_per', 'max', 'min']]
-explore.to_csv(result_file)
+#explore.to_csv(result_file)
