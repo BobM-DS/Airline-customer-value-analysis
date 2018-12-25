@@ -28,4 +28,5 @@ def Get_input_data():
     input_data = np.array([Load_time, Last_to_end, Flight_count, \
                                 Seg_km_sum, Avg_discount])
     model_input = (input_data-mean) / (std)
-    return model_input
+    return np.array(model_input).reshape(1, -1)
+

@@ -8,6 +8,7 @@ Created on Mon Dec 24 04:10:09 2018
 import Clientdata
 import Kmeans
 import K_means_cluster
+import DefineLaber
 
 #run model:
 input_file = '../data/Processed_data/model_input.csv'   #get model_input 
@@ -25,5 +26,6 @@ K_means_cluster.labelPlot(labels, 5, centers)
 input_data = Clientdata.Get_input_data()
 
 #Predict
-client_laber = K_means_model.predict(input_data)
+client_predict = K_means_model.predict(input_data)
+client_laber = DefineLaber.Relaber(client_predict)
 print "This Client's Value is {}\n".format(client_laber)
